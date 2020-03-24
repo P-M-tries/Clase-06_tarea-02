@@ -11,66 +11,76 @@ const $addRowsButton = document.getElementById('add-rows-button')
 const $removeRowsButton = document.getElementById('remove-rows-button')
 const $rowsManipulation = document.getElementById('add-rows');
 
-let i = 2;
-$addRowsButton.onclick = function () {
-    let div = document.createElement('div');
-    let label = document.createElement('label');
-    let labelText = document.createTextNode('Annual salary of member ' + i);
-    label.appendChild(labelText);
-    label.setAttribute("id", `${i}`);
-    $rowsManipulation.appendChild(label);
-    let input = document.createElement('input');
-    input.setAttribute("type","number");
-    input.setAttribute("class","salary");
-    div.appendChild(label)
-    div.appendChild(input)
-    $rowsManipulation.appendChild(div);
-    //$rowsManipulation.appendChild(document.createElement('br'))
-    i = i + 1;
 
-    return false;
+function createMembers(numberOfMembers) {
+    addMember(i);
+    i += 1;
 
 }
 
-$removeRowsButton.onclick = function () {
-   let lastChild = $rowsManipulation.lastChild;
-   lastChild.remove();
+function addMember (index) {
+    const div = document.createElement('div');
+
+
+    const label = document.createElement('label');
+    label.textContent = 'Annual salary of member ' + index;
+
+    const input = document.createElement('input');
+    input.type = 'number'
+    input.className = 'salary';
+
+    div.appendChild(label)
+    div.appendChild(input)
+
+    $rowsManipulation.appendChild(div);
+
+}
+
+function removeDinamicallyAddedRows () {
+    const lastChild = $rowsManipulation.lastChild;
+    lastChild.remove();
     i = i - 1;
+
+}
+
+let i = 2;
+$addRowsButton.onclick = function () {
+    const numberOfMembers = 1;
+    createMembers(numberOfMembers);
+    return false;
+}
+
+$removeRowsButton.onclick = function () {
+    removeDinamicallyAddedRows();
     return false;
 }
 
 const $calculateButton = document.getElementById('calculate-button')
-let array = [];
-let highest;
-let lowest;
-let average;
-let monthlyAverage;
 
-function HTMLCollectionIntoArray () {
-    for (let i = 0; i < (document.getElementsByClassName('salary').length); i++) {
-        let item = Number(document.getElementsByClassName('salary').item(i).value)
-        if (document.getElementsByClassName('salary').item(i).value.length !== 0) {
+function HTMLCollectionIntoArray (HTMLCollection) {
+    let array = [];
+    for (let i = 0; i < (HTMLCollection.length); i++) {
+        let item = Number(HTMLCollection.item(i).value)
+        if (HTMLCollection.item(i).value.length !== 0) {
             array.push(item);
-        }
-
-        //  if (inputtx.value.length == 0)
-        
+        }       
     }
+    
+    return array;
 }
 
-function getHighestAnnualSalary () {
-    highest = Math.max.apply(Math, array);
+function getHighestAnnualSalary (array) {
+    const highest = Math.max.apply(Math, array);
     
     return highest;
 }
 
-function getLowestAnnualSalary () {
-    lowest = Math.min.apply(Math, array);
-
+function getLowestAnnualSalary (array) {
+    const lowest = Math.min.apply(Math, array);
     return lowest;
 }
 
-function getAverage () {
+function getAverage (array) {
 
     let arraySum = 0;
     for (let i = 0; i < array.length; i++) {
@@ -78,16 +88,12 @@ function getAverage () {
         arraySum += arrayItem;
     }
 
-    average = arraySum / array.length;
+    average = (arraySum / array.length).toFixed(2);
 
     return average;
 }
 
-function getMonthlySalaries () {
-
-}
-
-function getMonthlyAverage () {
+function getMonthlyAverage (array) {
     
     let monthlyArray = [];
     for (let i = 0; i < array.length; i++) {
@@ -102,26 +108,33 @@ function getMonthlyAverage () {
         monthlyArraySum += monthlyArrayItem;
     }
 
-    monthlyAverage = monthlyArraySum / monthlyArray.length;
+    monthlyAverage = (monthlyArraySum / monthlyArray.length).toFixed(2);
 
     return monthlyAverage;
     
 }
 
-$calculateButton.onclick = function() {
-    HTMLCollectionIntoArray();
-    getHighestAnnualSalary();
-    getLowestAnnualSalary();
-    getAverage();
-    getMonthlyAverage();
-
-
+function showResults (highest, lowest, average, monthlyAverage) {
     document.getElementById('highest-annual-salary').value = highest;
     document.getElementById('lowest-annual-salary').value = lowest;
     document.getElementById('annual-salary-average').value = average;
     document.getElementById('monthly-salary-average').value = monthlyAverage;
+}
 
-    array = [];
+function clearDataForNewCalculation () {
+    annualSalaries = [];
+}
+
+$calculateButton.onclick = function() {
+    let annualSalaries = HTMLCollectionIntoArray(document.getElementsByClassName('salary'));
+    const highest = getHighestAnnualSalary(annualSalaries);
+    const lowest = getLowestAnnualSalary(annualSalaries);
+    const average = getAverage(annualSalaries);
+    const monthlyAverage = getMonthlyAverage(annualSalaries);
+
+    showResults (highest, lowest, average, monthlyAverage);
+
+    clearDataForNewCalculation();
 
     return false;
 
