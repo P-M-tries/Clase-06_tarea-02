@@ -60,7 +60,7 @@ function getAverage (array) {
         arraySum += arrayItem;
     }
 
-    average = (arraySum / array.length).toFixed(2);
+    average = Number((arraySum / array.length).toFixed(2));
 
     return average;
 }
@@ -80,7 +80,7 @@ function getMonthlyAverage (array) {
         monthlyArraySum += monthlyArrayItem;
     }
 
-    monthlyAverage = (monthlyArraySum / monthlyArray.length).toFixed(2);
+    monthlyAverage = Number((monthlyArraySum / monthlyArray.length).toFixed(2));
 
     return monthlyAverage;
     
