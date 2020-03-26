@@ -96,3 +96,5 @@ function showResults (highest, lowest, average, monthlyAverage) {
 function clearDataForNewCalculation () {
     annualSalaries = [];
 }
+
+
